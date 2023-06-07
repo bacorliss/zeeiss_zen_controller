@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Zen Controller TCP Commands </title>
+
+<style media="screen" type="text/css">
+/***********************************************************************/
+/* Main body, applies to all content */
+body { 
+   background-color: white;
+   font-family:Georgia, serif;
+   font-size:1em ;
+   color: black;
+}
+
+h1,h2{ margin-bottom: 0.5em; } 
+
+h3 { margin-bottom: 0em; } 
+p
+{
+font-family:"Times New Roman";
+border:0em;
+color:black;
+margin:0em;
+white-space:pre;
+}
+
+/***********************************************************************/
+/* Main document sections */
+#container {
+	background-color: white;
+	width: 1000px;
+	margin: 10px auto; /* the auto value on the sides, coupled with the width, centers the layout */
+	padding: 10px;
+} 
+
+
+.content {
+	background-color: white;
+	width: 1000px;
+	margin: 10px auto; /* the auto value on the sides, coupled with the width, centers the layout */
+	padding: 10px;
+	border: 2px solid black;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Index of TCP Command for Zen Controller</h1>
+<br>
+<br>
+<h2>     ZEN Commands</h2>
+<br>
+<h3>         -acquire_experiment</h3>
+<p>        SYNTAX: -acquire_experiment [full_img_path]</p>
+<p>        DESCRIPTION: Acquires an image experiment in Zen, saves it as LSM file to given path.</p>
+<p>         Image window is closed as soon as Zen finishes saving image to file system.</p>
+<p>         An image experiment can be many types of images: single scan, z stack, time series,</p>
+<p>         bleaching etc. The type of image acquired depends on what is checked for the image</p>
+<p>         experiment in Zen. Currently only single scans or z stacks can be set programmatically</p>
+<p>         for the experiment type.</p>
+<p>         BUG: If image is acquire but not saved, Zen does not hide the image experiment progress</p>
+<p>           bar even after the image is done.</p>
+<p>        ARGS:</p>
+<p>           full_img_path [string, optional]: full path of lsm image to be saved. If not</p>
+<p>               specified the image will be acquired but not saved and closed. MUST be surrounded</p>
+<p>               by "" if spaces exist in path.</p>
+<p>        EXAMPLE: -acquire_experiment "C:\TestImages\testimage01.lsm"</p>
+<br>
+<h3>         -import_marked_locations</h3>
+<p>        SYNTAX: -import_marked_locations file_path</p>
+<p>        DESCRIPTION: clears current marked locations in zen, and then imports a file containing</p>
+<p>            xyz tab delimited stage coordinates and adds them to the marked location list. First</p>
+<p>           line of file is skipped, assumed to be header: x tab y tab z.</p>
+<p>           File would look like (not tab before first column):</p>
+<p>           x  y   z</p>
+<p>           25.5 1500.00 15.00</p>
+<p>           1400   2500    -21</p>
+<p>           5500   -2500   0</p>
+<p>        BUG: the popup menu does not display new marked locations, you must click [Mark] once</p>
+<p>           in the Marked Locations menu in the |Stage| tab for it to update the menu. This action</p>
+<p>           will add another marked location to the list, so just ignore this last entry.</p>
+<p>        ARGS:</p>
+<p>           file_path [string, required]: full path to a text file containing locations to be be added</p>
+<p>               to the marked locations list in zen</p>
+<p>        EXAMPLE: -import_marked_locations "C:\mylocations.xyz"</p>
+<br>
+<h3>         -export_marked_locations</h3>
+<p>        SYNTAX: -export_marked_locations file_path</p>
+<p>        DESCRIPTION: saves the current marked locations in Zen to a text file in xyz tab delimited</p>
+<p>           format   to the path specified.</p>
+<p>           File would look like (no tabs before first column):</p>
+<p>           x  y   z</p>
+<p>           25.5 1500.00 15.00</p>
+<p>           1400   2500    -21</p>
+<p>           5500   -2500   0</p>
+<p>        ARGS:</p>
+<p>           file_path [string, required]: full path to a text file containing to be written to.</p>
+<p>        EXAMPLE: -exportmarked_locations "C:\mylocations.xyz"</p>
+<br>
+<h3>         -set_experiment_actions</h3>
+<p>        SYNTAX: -set_experiment_actions isZStack isTimeseries</p>
+<p>        DESCRIPTION: Checks or unchecks the checkboxes for experiment type, adding specific</p>
+<p>           actions to the next image experiment acquired.  Currently the Bleaching, TileScan,</p>
+<p>           Positions, and Regions checkboxes are not supported and cannot be modified programatically.</p>
+<p>        ARGS</p>
+<p>           isZStack [boolean(1=TRUE, 0=False), required]: true checks zstack checkbox, adding</p>
+<p>               zstack to the experiment.</p>
+<p>           isTimeseries [boolean(1=TRUE, 0=False), required]: true checks timeseries checkbox,</p>
+<p>               adding timeseries to the experiment.</p>
+<p>        EXAMPLE: -set_experiment_actions 1 0</p>
+<br>
+<h3>         -get_experiment_actions</h3>
+<p>        SYNTAX: -get_experiment_actions</p>
+<p>        DESCRIPTION: Checks or unchecks the checkboxes for experiment type, adding specific</p>
+<p>           actions to the next image experiment acquired.  Currently the Bleaching, TileScan,</p>
+<p>           Positions, and Regions checkboxes are not supported and cannot be modified programatically.</p>
+<p>        OUTPUT: isZstack isTimeseries</p>
+<p>           isZStack [boolean(True, False)]: true mean z stack checkbox is checked.</p>
+<p>           isTimeseries [boolean(True, False)]: true means time series checkbox is checked.</p>
+<p>               adding timeseries to the experiment.</p>
+<p>        EXAMPLE: -get_experiment_actions</p>
+<br>
+<h3>         -set_aotf</h3>
+<p>        SYNTAX: -set_aotf track_name laser_name val</p>
+<p>        DESCRIPTION: For the given track name and laser name, sets the aotf to the given value.</p>
+<p>           The AOTF is a percent value in which the laser light is accurately attenuated.</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           laser_name [string, required]: name of laser to be adjusted as they are named in the |Channels| tab.</p>
+<p>               In this case the laser name is the wavelength of the laser, found below the first track</p>
+<p>               there is a series of labeled check boxes, each for a laser.</p>
+<p>               Typicals names: 458, 477, 488,514,543,633</p>
+<p>           val [float, required]: percent value for aotf. rounded to one decimal or integer</p>
+<p>        EXAMPLE: -set_aotf "Track1" "488" 35</p>
+<br>
+<h3>         -get_aotf</h3>
+<p>        SYNTAX: -get_aotf track_name laser_name</p>
+<p>        DESCRIPTION: For the given track name and laser name, gets the aotf value</p>
+<p>           The AOTF is a percent value in which the laser light is accurately attenuated.</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           laser_name [string, required]: name of laser to be adjusted as they are named in the |Channels| tab.</p>
+<p>               In this case the laser name is the wavelength of the laser, found below the first track</p>
+<p>               there is a series of labeled check boxes, each for a laser.</p>
+<p>               Typicals names: 458, 477, 488,514,543,633</p>
+<p>         OUTPUT: val</p>
+<p>           val [double]: value of aotf for specified track_name and laser_name</p>
+<p>        EXAMPLE: -get_aotf "Track1" "488"</p>
+<br>
+<h3>         -set_channel_gain</h3>
+<p>        SYNTAX: -set_channel_gain track_name channel_name val</p>
+<p>        DESCRIPTION: given the track and the name of the channel, sets the gain level for the</p>
+<p>           detector to the specified value (integer).</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           channel_name [integer, required]: name of channel wheret he gain will be changed as defined in the</p>
+<p>               imaging tab. Usually called something like "Ch1","Ch2" etc.</p>
+<p>           val [r, integer]: new gain level for detector</p>
+<p>        EXAMPLE: -set_channel_gain "Track1" "Ch2" 650</p>
+<br>
+<h3>         -get_channel_gain</h3>
+<p>        SYNTAX: -get_channel_gain track_name channel_name</p>
+<p>        DESCRIPTION: given the track and the name of the channel, gets the gain level for the</p>
+<p>           detector.</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           channel_name [integer, required]: name of channel wheret he gain will be changed as defined in the</p>
+<p>               imaging tab. Usually called something like "Ch1","Ch2" etc.</p>
+<p>        OUTPUT: val</p>
+<p>           val [double]: value for channel gain for specified track and channel</p>
+<p>        EXAMPLE: -get_channel_gain "Track1" "Ch2"</p>
+<br>
+<h3>         -set_pinhole_diameter</h3>
+<p>        SYNTAX: -set_pinhole_diameter track_name channel_name val</p>
+<p>        DESCRIPTION: Set the pinhole diameter for pinhole associated with specified track and channel.</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           channel_name [integer, required]: name of channel wheret he gain will be changed as defined in the</p>
+<p>               imaging tab. Usually called something like "Ch1","Ch2" etc.</p>
+<p>           val [double/int,  required]: diameter for the pinhole, in micrometers, rounded to 2 decimals</p>
+<p>               points or intenger</p>
+<p>        EXAMPLE: -set_pinhole_diameter Track1 CH2 75</p>
+<br>
+<h3>         -get_pinhole_diameter</h3>
+<p>        SYNTAX: -get_pinhole_diameter track_name channel_name</p>
+<p>        DESCRIPTION: get the pinhole diameter for pinhole associated with specified track and channel.</p>
+<p>        ARGS:</p>
+<p>           track_name [string, required]: name of the track as specified in the |Imaging Setup| tab. This</p>
+<p>               default for this is "Track1"</p>
+<p>           channel_name [integer, required]: name of channel wheret he gain will be changed as defined in the</p>
+<p>               imaging tab. Usually called something like "Ch1","Ch2" etc.</p>
+<p>        OUTPUT: val</p>
+<p>           val [double]: diameter of specified pinhole (um).</p>
+<p>        EXAMPLE: -set_pinhole_diameter Track1 CH2</p>
+<br>
+<h3>         -set_pinhole_xy</h3>
+<p>        SYNTAX: -set_pinhole_xy pinhole_name x y</p>
+<p>        DESCRIPTION: Set the pinhole xy position for the specified pinhole_name. Units in um.</p>
+<p>        BUG: This appears to overwrite the stored positions for the pinhole, so you cannot</p>
+<p>           revert to the original position by clicking "Move to Stored Position". Conclusion:</p>
+<p>           Dont use this unless you know the preset value!! Only works with PH1, cannot select</p>
+<p>           other pinholes. No solution found yet.</p>
+<p>        NOTE: This function is disabled</p>
+<p>        ARGS:</p>
+<p>           pinhole_name [r, string/int]: either the name or index of the pinhole to adjust.</p>
+<p>               Name is name found in "Adjust Pinhole and Collimator" in Maitain Tab</p>
+<p>               Index starts at 0 for choices in "Adjust Pinhole and Collimator" in Maitain Tab</p>
+<p>           x [double/int,  required]: x position for pinhole, in micrometers, rounded to 2 decimals</p>
+<p>               points or intenger</p>
+<p>           y [double/int, required]: y position for pinhole, in micrometers, rounded to 2 decimals</p>
+<p>               points or intenger</p>
+<p>        EXAMPLE: -set_pinhole_xy "PH2" 100 -50</p>
+<br>
+<h3>         -get_pinhole_xy</h3>
+<p>        SYNTAX: -get_pinhole_xy pinhole_name</p>
+<p>        DESCRIPTION: get the pinhole xy position for the specified pinhole_name. Units in um.</p>
+<p>        BUG: This appears to overwrite the stored positions for the pinhole, so you cannot</p>
+<p>           revert to the original position by clicking "Move to Stored Position". Conclusion:</p>
+<p>           Dont use this unless you know the preset value!! Only works with PH1, cannot select</p>
+<p>           other pinholes. No solution found yet.</p>
+<p>        NOTE: This function is disabled</p>
+<p>        ARGS:</p>
+<p>           pinhole_name [r, string/int]: either the name or index of the pinhole to adjust.</p>
+<p>               Name is name found in "Adjust Pinhole and Collimator" in Maitain Tab</p>
+<p>               Index starts at 0 for choices in "Adjust Pinhole and Collimator" in Maitain Tab</p>
+<p>        OUTPUT: x y</p>
+<p>           x [double]: x coordinate of specified pinhole (um).</p>
+<p>           y [double]: x coordinate of specified pinhole (um).</p>
+<p>        EXAMPLE: -set_pinhole_xy "PH2"</p>
+<br>
+<h3>         -set_laser_current_percent</h3>
+<p>        SYNTAX: -set_laser_current_percent laser_name val</p>
+<p>        DESCRIPTION: Set the % current for the specified laser. This only works if the laser</p>
+<p>           current is adjustable (HeNe lasers are not adjustable, for example).</p>
+<p>        WARNING: For gas argon based laser systems do not set about 50%, will shorten life!!</p>
+<p>        ARGS:</p>
+<p>           laser_name [string/int,  required]: either name or index of the laser to adjust</p>
+<p>               Name is the name in the |Laser| column in the Laser tab in the acquisition tab</p>
+<p>               Index starts at 0 in the entries in the table in the Laser tab</p>
+<p>           val [integer,  required]: sets the percent current for the laser</p>
+<p>        EXAMPLE: -set_laser_current_percent "Argon/2" 50</p>
+<br>
+<h3>         -get_laser_current_percent</h3>
+<p>        SYNTAX: -get_laser_current_percent laser_name</p>
+<p>        DESCRIPTION: Get the % current for the specified laser. This only works if the laser</p>
+<p>           current is adjustable (HeNe lasers are not adjustable, for example).</p>
+<p>        WARNING: For gas argon based laser systems do not set about 50%, will shorten life!!</p>
+<p>        Bug: Can only seem to select argon laser (first laser by index), which for this system is</p>
+<p>           acceptable because that is the only adjustable current laser.</p>
+<p>        ARGS:</p>
+<p>           laser_name [string/int,  required]: either name or index of the laser to adjust</p>
+<p>               Name is the name in the |Laser| column in the Laser tab in the acquisition tab</p>
+<p>               Index starts at 0 in the entries in the table in the Laser tab.</p>
+<p>        OUTPUT: val</p>
+<p>           val [integer]: the percent current for the laser.</p>
+<p>        EXAMPLE: -get_laser_current_percent "Argon/2"</p>
+<br>
+<h3>         -set_zstack_center_current</h3>
+<p>        SYNTAX: -zstack_center_current</p>
+<p>        DESCRIPTION: Centers z stack on current z coordinate position so that the next</p>
+<p>           acquired z stack is centered around this new coordinate (with -acquire_experiment</p>
+<p>           command).</p>
+<p>           This adjusts the zstack center offset so that:</p>
+<p>             zstack_center + zstack_center_offset = curent_z_position</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -zstack_center_current</p>
+<br>
+<h3>         -set_zstack_center</h3>
+<p>        SYNTAX: -set_zstack_center z</p>
+<p>        DESCRIPTION: Sets center of z stack to specified z position (units in micrometers,</p>
+<p>           rounded to two decimal points or integer).</p>
+<p>        ARGS:</p>
+<p>           z [float, required]: float specifying z posiiton of z stack center (units um,</p>
+<p>               rounded to 2 decimal points or integer).</p>
+<p>        EXAMPLE: -zstack_center 30.50</p>
+<br>
+<h3>         -get_zstack_center</h3>
+<p>        SYNTAX: -get_zstack_center</p>
+<p>        DESCRIPTION: gets center of z stack, halfway between start and end values</p>
+<p>        OUTPUT: z</p>
+<p>           z [double]: double specifying z posiiton of z stack center (um)</p>
+<p>        EXAMPLE: -get_zstack_center</p>
+<br>
+<h3>         -set_zstack_range</h3>
+<p>        SYNTAX: -set_zstack_range z1 z2 mode</p>
+<p>        DESCRIPTION: sets start and end of zstack, keeping EITHER nz or dz constant.</p>
+<p>        ARGS:</p>
+<p>           z1 [double, required]: double specifying start of zstack (um)</p>
+<p>           z2 [double, required]: double specifying end of zstack (um)</p>
+<p>           mode [string, required]: keyword that must be either "SLICES" or "SPACING".</p>
+<p>               If SLICES, then zstack slices number is kept constant while setting range.</p>
+<p>               If SPACING, then spacing between z slices is kept constant while setting range.</p>
+<p>        EXAMPLE: -set_zstack_range 50 100</p>
+<br>
+<h3>         -get_zstack_range</h3>
+<p>        SYNTAX: -get_zstack_range</p>
+<p>        DESCRIPTION: gets start and end of currently set zstack.</p>
+<p>        OUTPUT: z1 z2</p>
+<p>           z1 [double, required]: double specifying start of zstack (um)</p>
+<p>           z2 [double, required]: double specifying end of zstack (um)</p>
+<p>        EXAMPLE: -get_zstack_range</p>
+<br>
+<h3>         -set_zstack_dz</h3>
+<p>        SYNTAX: -set_zstack_dz dz</p>
+<p>        DESCRIPTION: Set spacing between z slices for a zstack in the z stack tab</p>
+<p>        ARGS:</p>
+<p>           dz [float, required]: float specifying z axis spacing between z slices units um,</p>
+<p>               rounded to 2 decimal points or integer).</p>
+<p>        EXAMPLE: -zstack_dz 10.00</p>
+<br>
+<h3>         -get_zstack_dz</h3>
+<p>        SYNTAX: -get_zstack_dz</p>
+<p>        DESCRIPTION: Get spacing between z slices for a zstack in the z stack tab</p>
+<p>        OUTPUT: dz</p>
+<p>           dz [float, required]: float specifying z axis spacing between z slices (um)</p>
+<p>        EXAMPLE: -get_zstack_dz</p>
+<br>
+<h3>         -set_zstack_nz</h3>
+<p>        SYNTAX: -set_zstack_nz nz</p>
+<p>        DESCRIPTION: Set total number of z slices in z stack tab.</p>
+<p>        ARGS:</p>
+<p>           nz [integer, required]: number of z slices for next z stack acquired.</p>
+<p>        EXAMPLE: -set_zstack_nz 6</p>
+<br>
+<h3>         -get_zstack_nz</h3>
+<p>        SYNTAX: -get_zstack_nz</p>
+<p>        DESCRIPTION: get total number of z slices in z stack tab.</p>
+<p>        OUTPUT: nz</p>
+<p>           nz [integer, required]: number of z slices for next z stack acquired.</p>
+<p>        EXAMPLE: -get_zstack_nz</p>
+<br>
+<h3>         -load_config</h3>
+<p>        SYNTAX: -load_config config_name</p>
+<p>        DESCRIPTION: Loads specified imaging configuration, which is listed in the</p>
+<p>           configuration menu (acquisition tab). An imaging configuration is a collection</p>
+<p>           of all of the settings needed to acquire an image in a certain way in Zen.</p>
+<p>         BUG: if config_name does not exist a popup menu will appear that must be manually closed</p>
+<p>           instead of returning a "FAIL: config not exist message".</p>
+<p>        ARGS:</p>
+<p>           config_name [string, required]: name of configuration to be loaded, this should match</p>
+<p>               one of the configurations in the configuration menu.</p>
+<p>        EXAMPLE: -load_config "10X_Test"</p>
+<br>
+<h3>         -save_config</h3>
+<p>        SYNTAX: -save_config "config_name"</p>
+<p>        DESCRIPTION: Saves current settings under given configuration name.</p>
+<p>        BUG: The saved config does not appear in the config list when the user clicks on the load</p>
+<p>           button in the config menu, but the config does exist in the program and can be reloaded</p>
+<p>           programatically.</p>
+<p>        ARGS:</p>
+<p>           config_name [string, required]: name of configuration to be saved. Zen requires the</p>
+<p>               configuration name have no spaces or special characters.</p>
+<p>        EXAMPLE: -save_config "2p5X_Test"</p>
+<br>
+<h3>          -get_config_name</h3>
+<p>        SYNTAX: -get_config_name</p>
+<p>        DESCRIPTION: Returns name of current imaging configuration used in Zen.</p>
+<p>        OUTPUT: config_name</p>
+<p>           config_name [string]: name of current imaging configuration.</p>
+<p>        EXAMPLE: -get_config_name</p>
+<br>
+<h3>         -move_stage_xyz</h3>
+<p>        SYNTAX: -move_stage_xyz x y z</p>
+<p>        DESCRIPTION: Moves stage and focus to specified xyz coordinate</p>
+<p>        ARGS:</p>
+<p>           x [float, required]: float specifying x axis stage coordinate that the stage</p>
+<p>               will move to (unite are um, float is rounded to 2 decimals or integer).</p>
+<p>           y [float, required]: float specifying y axis stage coordinate that the stage</p>
+<p>               will move to (unite are um, float is rounded to 2 decimals or integer).</p>
+<p>           z [float, required]: float specifying z axis stage coordinate that the stage</p>
+<p>               will move to (unite are um, float is rounded to 2 decimals or integer).</p>
+<p>        EXAMPLE: -move_stage_xyz 1500.00 -1000.00 35</p>
+<br>
+<h3>         -get_stage_xyz</h3>
+<p>        SYNTAX: -get_stage_xyz</p>
+<p>        DESCRIPTION: Moves stage and focus to specified xyz coordinate</p>
+<p>        Output: x y z</p>
+<p>           x [float, required]: float specifying x axis stage coordinate (um).</p>
+<p>           y [float, required]: float specifying y axis stage coordinate (um).</p>
+<p>           z [float, required]: float specifying z axis stage coordinate (um).</p>
+<p>        EXAMPLE: -get_stage_xyz</p>
+<br>
+<h3>         -move_stage_home</h3>
+<p>        SYNTAX: -move_stage_home</p>
+<p>        DESCRIPTION: moves stage and focus to zero for x,y,z axis.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -move_stage_home</p>
+<br>
+<h3>         -set_stage_zero</h3>
+<p>        SYNTAX: -set_stage_zero</p>
+<p>        DESCRIPTION: The current x,y,z coordinates for stage and focus is set to 0.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -set_stage_zero</p>
+<br>
+<h3>         -disp_args</h3>
+<p>        SYNTAX: -disp_args</p>
+<p>        DESCRIPTION: Displays arguments in a message box. Used for debugging</p>
+<p>        ARGS:</p>
+<p>           Any collection of args</p>
+<p>        EXAMPLE: -disp_args 35 61 "Hello World"</p>
+<br>
+<h3>         Else</h3>
+<p>        SYNTAX: anything that does not match previous commands</p>
+<p>        DESCRIPTION: if command is not part of this list and not supported, the status</p>
+<p>           REJECTED will be returned.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -invalid_command123</p>
+<br>
+<br>
+<h2>     TCP Commands</h2>
+<br>
+<h3>         -tcp_resend</h3>
+<p>        SYNTAX: -tcp_resend ind</p>
+<p>        DESCRIPTION: Resend last command group recieved by server and the responses. The last</p>
+<p>           10 commands are remembered. Calling this command by itself OR the last command in the</p>
+<p>           command group will NOT be added to the command history, so calling it on the nth command</p>
+<p>           will return the same result. -tcp_resend 1 will send back the previous command recieved</p>
+<p>           by the macro. -tcp_resend 0 is the current.</p>
+<p>        ARGS:</p>
+<p>           ind [integer, required] Resends the respone(s) to a specific message sent by</p>
+<p>               by the client. ind can be from 0 (most recent response) to 9 (oldest reponse</p>
+<p>               remembered.</p>
+<p>        EXAMPLE: -tcp_resend 1</p>
+<br>
+<h3>         -tcp_ping</h3>
+<p>        SYNTAX: -tcp_ping</p>
+<p>        DESCRIPTION: Requests tcp server to send message back to client</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -tcp_ping</p>
+<br>
+<h3>         -tcp_clear_msg_out_buffer</h3>
+<p>        SYNTAX: -tcp_clear_msg_out_buffer</p>
+<p>        DESCRIPTION: Clears the vb6 message buffer for outgoing commands. Calling this command by</p>
+<p>           itself OR the last command in the command group will NOT be added to the command history,</p>
+<p>           so calling it on the nth command will return the same result.</p>
+<p>        WARNING: Not ever recommended, for macro debugging use only.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -tcp_clear_msg_out_buffer</p>
+<br>
+<h3>         -tcp_get_msg_out_buffer</h3>
+<p>        SYNTAX: -tcp_clear_msg_out_buffer</p>
+<p>        DESCRIPTION: Gets the vb6 message buffer for outgoing commands, which is a list of the last</p>
+<p>           10 commands recieved and the macros responses.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -tcp_get_msg_out_buffer</p>
+<br>
+<h3>         -tcp_clear_msg_in_buffer</h3>
+<p>        SYNTAX: -tcp_clear_msg_in_buffer</p>
+<p>        DESCRIPTION: Clears the vb6 message buffer for outgoing commands.</p>
+<p>        WARNING: Not ever recommended, for macro debugging use only.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -tcp_clear_msg_in_buffer</p>
+<p>            Clear message in buffer</p>
+<br>
+<h3>         -tcp_get_msg_in_buffer</h3>
+<p>        SYNTAX: -tcp_get_msg_in_buffer</p>
+<p>        DESCRIPTION: Gets the vb6 message buffer for outgoing commands. Similiar to calling</p>
+<p>           -tcp_resend 0.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -tcp_get_msg_in_buffer</p>
+<p>            Clear message in buffer</p>
+<br>
+<h3>         Else</h3>
+<p>        SYNTAX: anything that does not match previous commands</p>
+<p>        DESCRIPTION: if command is not part of this list and not supported, the status</p>
+<p>           REJECTED will be returned.</p>
+<p>        ARGS:</p>
+<p>           none</p>
+<p>        EXAMPLE: -invalid_command123</p>
+
+<br><br><br>
+</body>
+</html>

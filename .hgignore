@@ -1,0 +1,3 @@
+syntax: glob
+ZenControllerLog.txt
+scrape/*

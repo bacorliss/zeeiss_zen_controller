@@ -1,0 +1,43 @@
+
+
+Short Term
+Suppress confirmation dialogue for saving over config
+Comment on TCP commands
+
+
+Long Term Todo
+Return additional info with "SUCCESS:" as SUCCESS{n,m,...}: -command;;
+
+
+Bugs
+Load config does not show new config loaded
+Imported marked locations do not populate menu without clicking add
+
+
+Done
+Bugfix:DataUponArrival for winsock: only incoming text is checked for msg delimiter and not entire buffer
+	Check on entire buffer instead
+Bugfix: Lock Text boxes in GUI (disabling objects greys out text- hard to read)
+BUgfix: set_laser_current_percent, need to confirm requested laser is actually set
+Added: Stage stop button in GUI
+Bugfix: For tcp resend replace msg delim with command delim
+Bugfix: Updating VB6 to SP6 and SP6 Cumulative allows winsock activex to be used.
+Feature: Append Message ID to outgoing messages Ex: [message-id]:RECEIVED;;
+Clear in buffer after msg_del
+-set_experiment_actions
+add msg id to commands
+zstack centering is wrong
+Malformed commands
+Get Functions
+	get_current_stage_position_xyz
+	get_current_config
+	get_current_zstack_dz
+	get_current_zstack_nz
+	get_current_pinhole_xy
+	get_current_pinhole_diameter
+	get_current_msg_in_buffer
+	get_current_msg_out_buffer
+	
+-get_zstack_range
+-set_zstack_range
+-get_config_name

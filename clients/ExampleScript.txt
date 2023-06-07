@@ -1,0 +1,9 @@
+-move_stage_xyz 10000 10000 10
+-acquire_experiment "C:\Test\1.lsm"
+-move_stage_xyz -10000 10000 -10
+-acquire_experiment "C:\Test\2.lsm"
+-move_stage_xyz -10000 -10000 20
+-acquire_experiment "C:\Test\3.lsm"
+-move_stage_xyz 10000 -10000 20
+-acquire_experiment "C:\Test\4.lsm"
+-move_stage_xyz 10000 10000 10
