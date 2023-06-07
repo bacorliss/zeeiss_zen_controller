@@ -44,6 +44,6 @@ Note: 10X image configuration must exist in Zen. Message explanation: load "10X"
 
 Author: Bruce Corliss
 Email: bruce.a.corliss@gmail.com
-Note: this repository is a mirror of an archived repository on [google code(https://code.google.com/archive/p/zen-controller/).
+Note: this repository is a mirror of an archived repository on [google code](https://code.google.com/archive/p/zen-controller/).
 
 
