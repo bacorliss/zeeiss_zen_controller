@@ -1,4 +1,6 @@
 # Zeiss Zen Controller Macro
+Plug-in for Zeiss Zen 2008 Image Acquisition Program that allows for external programmatic control of Zeiss CLSM microscope.
+![Zen Controller Screenshot]([http://url/to/img.png](https://github.com/bacorliss/zeiss_zen_controller/blob/6acb9181dca7ede06d6f9dd75e51ea08808f745d/media/zen_controller_screenshot.png))
 
 ## DESCRIPTION
 This Zen Visual Basic 6.3 macro is a TCP/IP Programmatic Automation Interface for Zeiss Zen Confocal Laser Scanning Microscope Systems.
