@@ -21,23 +21,28 @@ Zeiss CLSM PASCAL, Zen 2009 V5.5 SP1
 3. Send commands over a standard TCP client with the syntax specified in the “tcp_commands.html” file.
 
 ## EXAMPLE TCP CLIENT #1
-1. Run the example python client located in client/tcp_client_gui.py by double clicking it.
-	** Requires Python 2.7: http://www.python.org/ftp/python/2.7/python-2.7.msi	
-      ** Requires WX Python: http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.12.1-py27.exe
+1. Run the example python client located in client/tcp_client_gui.py by double clicking it. <br>
+	** Requires Python 2.7: http://www.python.org/ftp/python/2.7/python-2.7.msi <br>	
+      ** Requires WX Python: http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.12.1-py27.exe <br>
 2. Click |Connect|. Type in TCP commands into window and either click |Send All Messages| or highlight the lines you want to send and press Ctrl+Spaces to send.
 3. For Python client, no command or message delimiters are needed, type one command per line!
+
+
 Example message:
-Note: 10X image configuration must exist in Zen. Message explanation: load oad "10X" config, activate z stack, move stage, center z stack, acquire z stack.
--load_config 10X
--set_experiment_actions 1 0
--move_stage_xyz 1000 5000 20
--set_zstack_center_current
+Note: 10X image configuration must exist in Zen. Message explanation: load oad "10X" config, activate z stack, move stage, center z stack, acquire z stack. <br>
+-load_config 10X  <br>
+-set_experiment_actions 1 0 <br>
+-move_stage_xyz 1000 5000 20 <br>
+-set_zstack_center_current <br>
 -acquire_experiment “C\test.lsm”
 
 ## EXAMPLE TCP CLIENT #2
 Microsoft Windows XP HyperTerminal: Although untested at this point, it should be possible to connect and send commands with this program. Just remember to include the command and message delimiters! Use the same port as specified in Zen Controller and the local loopback ip address (127.0.0.1 ).
+
 Example message:
+
 Note: 10X image configuration must exist in Zen. Message explanation: load "10X" config, activate z stack, move stage, center z stack, acquire z stack.
+
 -load_config 10X; -set_experiment_actions 1 0; -move_stage_xyz
  1000 5000 20; -set_zstack_center_current;-acquire_experiment “C\test.lsm”;;;
 
